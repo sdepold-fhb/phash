@@ -2,7 +2,6 @@ Dependencies:
   - sinatra
   - sinatra-reloaded
   - phashion
-  - rmagick
 
 Installing Phashion:
   - git clone https://github.com/mperham/phashion.git
@@ -13,4 +12,3 @@ Installing Phashion:
 Installing the rest:
   - sudo gem install sinatra
   - sudo gem install sinatra-reloader
-  - sudo gem install rmagick
