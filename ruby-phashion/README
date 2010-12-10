@@ -1,0 +1,16 @@
+Dependencies:
+  - sinatra
+  - sinatra-reloaded
+  - phashion
+  - haml
+
+Installing Phashion:
+  - git clone https://github.com/mperham/phashion.git
+  - cd phashion
+  - gem build ./phashion.gemspec
+  - sudo gem install ./phashion-1.0.2.gem
+
+Installing the rest:
+  - sudo gem install sinatra
+  - sudo gem install haml
+  - sudo gem install sinatra-reloader
