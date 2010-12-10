@@ -1,0 +1,50 @@
+require 'rubygems'
+require 'lib/mojo_magick.rb'
+require 'rake/gempackagetask'
+require 'rake'
+require 'rake/testtask'
+require 'rake/rdoctask'
+
+desc 'Default: run unit tests.'
+task :default => :test
+
+desc 'Test the mojo_magick plugin.'
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'lib'
+  t.pattern = 'test/**/*_test.rb'
+  t.verbose = true
+end
+
+desc 'Generate documentation for the mojo_magick plugin.'
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'MojoMagick'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+# gem builder
+spec = Gem::Specification.new do |s|
+    s.platform  =   Gem::Platform::RUBY
+    s.name      =   "mojo_magick"
+    s.version   =   MojoMagick::VERSION
+    s.author    =   "Steve Midgley"
+    s.email     =   "public@misuse.org"
+    s.summary   =   "Simple Ruby stateless module interface to imagemagick."
+    s.files     =   FileList['lib/*.rb', 'test/*'].to_a
+    s.require_path  =   "lib"
+    s.autorequire   =   "mojo_magick"
+    s.test_files = Dir.glob('tests/*.rb')
+    s.has_rdoc  =   true
+    s.extra_rdoc_files  =   ["README"]
+end
+
+Rake::GemPackageTask.new(spec) do |pkg|
+    pkg.need_tar = true
+end
+
+task :build_gem => "pkg/#{spec.name}-#{spec.version}.gem" do
+    puts "generated latest version"
+end
+
