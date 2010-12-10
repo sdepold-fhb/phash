@@ -2,6 +2,7 @@ Dependencies:
   - sinatra
   - sinatra-reloaded
   - phashion
+  - imagemagick
 
 Installing Phashion:
   - sudo gem install ./vendor/phashion-1.0.2.gem
@@ -9,3 +10,8 @@ Installing Phashion:
 Installing the rest:
   - sudo gem install sinatra
   - sudo gem install sinatra-reloader
+  - install ImageMagick via HomeBrew (mac) oder apt-get (ubuntu)
+
+Starten der App:
+  - ruby phash.rb
+  - browse http://localhost:4567/
