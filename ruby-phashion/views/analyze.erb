@@ -2,8 +2,46 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title></title>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/base/jquery-ui.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        console.log("asd")
+        var values = { quality: 100, scale: 100, threshold: 15 }
+          , onChange = function(event, ui) {
+              var valueKey = $(ui.handle).parent().get(0).id
+              values[valueKey] = ui.value
+              $("#modified").load("/compare/<%= params[:filename] %>?quality=" + values.quality + "&scale=" + values.scale + "&threshold=" + values.threshold)
+            }
+        
+        $.each(values, function(k, v) {
+          $("#" + k).slider({ min: 1, value: v, change: onChange })
+        })
+      })
+    </script>
   </head>
   <body>
-    <img src="/uploads/<%= params[:filename] %>/thumb" />
+    <div style="float: left">
+      Original:<br/>
+      <img src="/uploads/<%= params[:filename] %>/thumb" />
+    </div>
+    <div style="float: left">
+      Modified:<br/>
+      <div id="modified">
+        <img src="/uploads/<%= params[:filename] %>/thumb" /><br/>
+        Equal
+      </div>
+    </div>
+    <div style="clear: both;"></div>
+    <br /><br/>
+    Quality:<br /><br/>
+    <div id="quality" class="slider"></div><br/>
+
+    Scale:<br /><br/>
+    <div id="scale" class="slider"></div><br/>
+
+    Threshold:<br /><br/>
+    <div id="threshold" class="slider"></div>
   </body>
 </html>
