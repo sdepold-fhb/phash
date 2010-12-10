@@ -14,34 +14,41 @@
               values[valueKey] = ui.value
               $("#modified").load("/compare/<%= params[:filename] %>?quality=" + values.quality + "&scale=" + values.scale + "&threshold=" + values.threshold)
             }
+          , onSlide = function(event, ui) {
+              var valueKey = $(ui.handle).parent().get(0).id
+              $("#" + valueKey + "Value").html(ui.value)
+            }
         
         $.each(values, function(k, v) {
-          $("#" + k).slider({ min: 1, value: v, change: onChange })
+          $("#" + k).slider({ min: 1, value: v, change: onChange, slide: onSlide })
+          $("#" + k + "Value").html(v)
         })
       })
     </script>
   </head>
   <body>
-    <div style="float: left">
-      Original:<br/>
-      <img src="/uploads/<%= params[:filename] %>/thumb" />
-    </div>
-    <div style="float: left">
-      Modified:<br/>
-      <div id="modified">
-        <img src="/uploads/<%= params[:filename] %>/thumb" /><br/>
-        Equal
+    <div style="width: 700px">
+      <div style="float: left  ">
+        Original:<br/>
+        <img src="/uploads/<%= params[:filename] %>/thumb" />
       </div>
+      <div style="float: left">
+        Modified:<br/>
+        <div id="modified">
+          <img src="/uploads/<%= params[:filename] %>/thumb" /><br/>
+          Equal
+        </div>
+      </div>
+      <div style="clear: both;"></div>
+      <br /><br/>
+      Quality: <span id="qualityValue"></span><br /><br/>
+      <div id="quality" class="slider"></div><br/>
+
+      Scale: <span id="scaleValue"></span><br /><br/>
+      <div id="scale" class="slider"></div><br/>
+
+      Threshold: <span id="thresholdValue"></span><br /><br/>
+      <div id="threshold" class="slider"></div>
     </div>
-    <div style="clear: both;"></div>
-    <br /><br/>
-    Quality:<br /><br/>
-    <div id="quality" class="slider"></div><br/>
-
-    Scale:<br /><br/>
-    <div id="scale" class="slider"></div><br/>
-
-    Threshold:<br /><br/>
-    <div id="threshold" class="slider"></div>
   </body>
 </html>
