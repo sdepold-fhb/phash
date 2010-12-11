@@ -9,38 +9,42 @@ IMAGE_UPLOAD_PATH = "./public/uploads"
 
 def compare_images(params)
   path = File.expand_path("#{IMAGE_UPLOAD_PATH}/#{params[:filename]}")
-  source = "#{path}/source"
+  file_ending = MojoMagick::file_ending("#{path}/source*")
+  source_path = "#{path}/source.#{file_ending}"
   options = {:quality => params["quality"] || 100, :percent => params["scale"] || 100}
-  modified = "#{path}/#{options.to_s}"
+  modified = "#{options.to_s}.#{file_ending}"
+  modified_path = "#{path}/#{modified}"
   
-  MojoMagick::resize(source, modified, options) unless File.exists?(modified)
+  MojoMagick::resize(source_path, modified_path, options) unless File.exists?(modified)
 
   Phashion::Image::SETTINGS[:dupe_threshold] = params["threshold"].to_i || 15
   puts Phashion::Image::SETTINGS[:dupe_threshold]
 
-  img1 = Phashion::Image.new(source)
-  img2 = Phashion::Image.new(modified)
+  img1 = Phashion::Image.new(source_path)
+  img2 = Phashion::Image.new(modified_path)
   
-  {:result => img1.duplicate?(img2), :modified_filename => options.to_s}
+  {:result => img1.duplicate?(img2), :modified_filename => modified}
 end
 
 get "/" do
   erb :index
 end
 
-get "/analyze/:filename" do
+get "/analyze/:filename/:file_ending" do
   erb :analyze
 end
 
 post "/upload" do
   upload_path = File.expand_path("#{IMAGE_UPLOAD_PATH}/#{Time.now.to_i}")
-  source = upload_path + "/source"
+  file_ending = MojoMagick::file_ending(params[:image][:tempfile].path)
+  source = upload_path + "/source.#{file_ending}"
+
   FileUtils.mkdir_p(upload_path)
   FileUtils.mv(params[:image][:tempfile].path, source)
   
-  MojoMagick::resize(source, upload_path + "/thumb", :width => 320, :height => 240)
+  MojoMagick::resize(source, upload_path + "/thumb.#{file_ending}", :width => 320, :height => 240)
     
-  redirect "/analyze/#{File.basename(upload_path)}"
+  redirect "/analyze/#{File.basename(upload_path)}/#{file_ending}"
 end
 
 get "/compare/:filename" do

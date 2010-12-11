@@ -86,6 +86,14 @@ module MojoMagick
   def MojoMagick::mime_type(source_file)
     (`file --mime-type #{source_file}`).gsub("\n", "").split(":").last.strip
   end
+  
+  def MojoMagick::file_ending(source_file)
+    case MojoMagick::mime_type(source_file)
+    when "image/jpeg" then "jpg"
+    when "image/gif" then "gif"
+    when "image/png" then "png"
+    end
+  end
 
   def MojoMagick::shrink(source_file, dest_file, options)
     opts = options.dup

@@ -20,7 +20,8 @@
             }
         
         $.each(values, function(k, v) {
-          $("#" + k).slider({ min: 1, value: v, change: onChange, slide: onSlide })
+          var max = (k == 'scale') ? 500 : 100
+          $("#" + k).slider({ min: 1, max: max, value: v, change: onChange, slide: onSlide })
           $("#" + k + "Value").html(v)
         })
       })
@@ -30,12 +31,12 @@
     <div style="width: 700px">
       <div style="float: left  ">
         Original:<br/>
-        <img src="/uploads/<%= params[:filename] %>/thumb" />
+        <img src="/uploads/<%= params[:filename] %>/thumb.<%= params[:file_ending] %>" />
       </div>
       <div style="float: left">
         Modified:<br/>
         <div id="modified">
-          <img src="/uploads/<%= params[:filename] %>/thumb" /><br/>
+          <img src="/uploads/<%= params[:filename] %>/thumb.<%= params[:file_ending] %>" /><br/>
           Equal
         </div>
       </div>

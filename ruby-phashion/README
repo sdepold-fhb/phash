@@ -17,6 +17,7 @@ Starten der App:
   - browse http://localhost:4567/
   
 Workflow on EC2:
+  #Take a look at http://paulstamatiou.com/how-to-getting-started-with-amazon-ec2
   #Start the instance (e.g. ami-26c7324f)
   #Connect via ssh
   sudo apt-get update
