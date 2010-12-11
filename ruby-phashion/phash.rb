@@ -12,7 +12,8 @@ def compare_images(params)
   file_ending = MojoMagick::file_ending("#{path}/source*")
   source_path = "#{path}/source.#{file_ending}"
   options = {:quality => params["quality"] || 100, :percent => params["scale"] || 100}
-  modified = "#{options.to_s}.#{file_ending}"
+  options_as_string = options.to_a.map{|o| o.join("")}.join("")
+  modified = "#{options_as_string}.#{file_ending}"
   modified_path = "#{path}/#{modified}"
   
   MojoMagick::resize(source_path, modified_path, options) unless File.exists?(modified)
