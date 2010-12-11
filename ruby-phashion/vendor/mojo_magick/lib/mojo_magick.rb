@@ -84,7 +84,7 @@ module MojoMagick
   end
   
   def MojoMagick::mime_type(source_file)
-    ("file --mime-type #{source_file}").gsub("\n", "").split(":").last.strip
+    (`file --mime-type #{source_file}`).gsub("\n", "").split(":").last.strip
   end
 
   def MojoMagick::shrink(source_file, dest_file, options)
