@@ -1,0 +1,63 @@
+git clone git@github.com:trolldbois/pHash.git
+cd pHash
+git remote add -f phash-play-python git@github.com:trolldbois/phash-play.git
+
+#init
+git branch python-bindings
+git branch lfs
+git checkout python-bindings
+
+
+
+git merge -s ours --no-commit phash-play-python/master 
+
+git read-tree -v --prefix=python/ -u phash-play-python/master
+git commit -m "Importing playground python bindings"
+
+git mv python/pHash-lib/bindings/python/ bindings/
+git commit -m "Moving in right place"
+
+git rm -rf python
+git commit -m "Delete useless import"
+
+#ok
+
+#LFS
+#largefile first commit     1bee842d222f1f8cd05add7f29637781774eca5e
+#large file parent commit   cfc9fdbe0854721115852cfc96243fd7029b069a
+#large file last commit 0af1012d4899aeeaed3e69a521bc2381341fc660
+
+git checkout lfs
+
+#git read-tree -v --prefix=lfs/ -u phash-play-python/largefile
+#git commit -m "Importing playground large file support"
+
+
+rm -f ../lfs-commits-ok
+
+git log --remotes=phash-play-python/largefile* cfc9fdbe0854721115852cfc96243fd7029b069a..0af1012d4899aeeaed3e69a521bc2381341fc660 |grep ^commit | cut -f 2 -d " "  |grep -v 481150f07e194a96b11d8c64d4cebdbfb6cfea64 > ../lfs-commits-ok
+
+for c in ` cat ../lfs-commits-ok` ; do 
+  git log $c --relative=pHash-lib/ -n 1 -u > ../$c.patch
+  git log $c --relative=pHash-lib/ -n 1 > ../$c.log
+  git apply -p 1 --reject ../$c.patch
+  git add -u .
+  git commit -F ../$c.log
+  read n
+done
+
+
+##
+git checkout master
+git merge lfs
+git merge python-bindings
+cp README.rdoc README
+git add README
+git commit -m 'README is mandatory'
+
+git push
+
+
+
+
+
